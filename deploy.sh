@@ -28,9 +28,33 @@ echo "📁 Creating application directory..."
 mkdir -p /opt/remote-camera
 cd /opt/remote-camera
 
-# Copy files (assuming they're in the same directory)
+# Copy files from current directory (where script is run)
 echo "📋 Copying application files..."
-cp -r ./* /opt/remote-camera/
+CURRENT_DIR="$(pwd)"
+echo "📁 Source directory: $CURRENT_DIR"
+ls -la "$CURRENT_DIR/"
+
+# Copy only remote-camera directory contents
+if [ -d "$CURRENT_DIR/remote-camera" ]; then
+    echo "📁 Copying from remote-camera subdirectory..."
+    cp -r "$CURRENT_DIR/remote-camera"/* /opt/remote-camera/
+else
+    echo "📁 Copying from current directory..."
+    cp -r "$CURRENT_DIR"/* /opt/remote-camera/
+fi
+
+# Change to application directory
+cd /opt/remote-camera
+
+# Check if requirements.txt exists
+if [ ! -f "requirements.txt" ]; then
+    echo "❌ requirements.txt not found in /opt/remote-camera"
+    echo "📁 Current directory contents:"
+    ls -la /opt/remote-camera/
+    echo "📁 Source directory contents:"
+    ls -la "$CURRENT_DIR/"
+    exit 1
+fi
 
 # Create virtual environment
 echo "🐍 Creating Python virtual environment..."
