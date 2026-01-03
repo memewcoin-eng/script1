@@ -14,9 +14,9 @@ fi
 echo "📦 Updating system packages..."
 apt update && apt upgrade -y
 
-# Install Python and dependencies
+# Install system dependencies
 echo "🐍 Installing Python and dependencies..."
-apt install -y python3 python3-pip python3-venv git curl
+apt install -y python3 python3-pip python3-venv git curl build-essential cmake pkg-config libjpeg-dev libtiff5-dev libpng-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libgtk-3-dev libatlas-base-dev gfortran
 
 # Install Node.js (for SocketIO compatibility)
 echo "📦 Installing Node.js..."
@@ -40,6 +40,11 @@ source venv/bin/activate
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt
+
+# Add user bin to PATH
+echo "🔧 Adding user bin to PATH..."
+echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
+source ~/.bashrc
 
 # Create systemd service
 echo "⚙️ Creating systemd service..."
